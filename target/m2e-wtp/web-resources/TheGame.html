@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="theGame">
+<head>
+	<meta charset="UTF-8">
+	<title>1) The Game</title>
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/style.css">
+	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular/angular-messages.js"></script>
+	<script>
+		angular.module("theGame", []);
+		angular.module("theGame").controller("theGameCtrl", function ($scope) {
+			$scope.app = "The Game";
+			$scope.choices = [
+				{name: "Rock", id: 1, type: "Power"},
+				{name: "Scissors", id: 2, type: "Power"},
+				{name: "Paper", id: 3, type: "Power"}
+			];
+
+			$scope.champs = [];
+
+			$scope.rollTheGame = function (power) {
+			function getRandom(min, max) {
+				  return Math.floor(Math.random() * max) + min  
+			}
+
+			$scope.findIdWinner = function(id){
+				for (var i = 1; $scope.choices.length >= i; i++) {
+				if(id == i){		
+					return $scope.choices[i-1].name;
+					};
+				}
+			}
+
+			$scope.computer = "";
+			$scope.winner = "No WINNER :'(";
+			var num = getRandom(1, 3);
+			if(typeof power !== "undefined"){
+			if(power.choice.id != num && power.choice != 0){
+				switch (num) {
+				  case 1:
+				  computer = $scope.findIdWinner(num);
+				if(power.choice.id == 2){
+				  	winner = "Computer Winner"
+				  }else if(power.choice.id == 3){
+					winner = "Player Winner"
+				  };
+				  break;
+				  case 2: console.log("Computer: Scissors"); 
+				  computer = $scope.findIdWinner(num);
+				  if(power.choice.id == 3){
+				  	winner = "Computer Winner"
+				  }else if(power.choice.id == 1){
+					winner = "Player Winner"
+				  };
+				  break;
+				  case 3: console.log("Computer: Paper"); 
+				  computer = $scope.findIdWinner(num);
+				  if(power.choice.id == 1){
+				  	winner = "Computer Winner"
+				  }else if(power.choice.id == 2){
+					winner = "Player Winner"
+				  };
+				  break;
+				}
+				$scope.champs.winner = winner;
+			}else{
+				$scope.champs.winner = winner = "Without Winners";
+				
+			};
+			$scope.champs.computer = $scope.findIdWinner(num);
+			$scope.champs.player = power.choice.name;
+		};
+	};
+		});
+	</script>
+</head>
+<body ng-controller="theGameCtrl">
+	<div class="jumbotron">
+		<h3>{{app}}</h3>
+		<form name="gameForm">
+		<select class="form-control" ng-model="power.choice" ng-options="choice.name group by choice.type for choice in choices">
+		<option value=""></option>
+		</select>
+		</form>
+		<button class="btn btn-primary btn-block" ng-click="rollTheGame(power)">Go to WIN!</button>
+		<table class="table table-striped">
+			<tr>
+				<th>Player 1</th>
+				<th>Computer</th>
+				<th>Winner</th>
+			</tr>
+			<tr>
+				<td>{{champs.player}}</td>
+				<td>{{champs.computer}}</td>
+				<td>{{champs.winner}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
